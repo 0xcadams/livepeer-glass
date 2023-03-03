@@ -1,12 +1,12 @@
 "use client";
 
 import {
+  ControlsContainer,
   FullscreenButton,
   PlayButton,
   Player as LivepeerPlayer,
   Progress,
   TimeDisplay,
-  useMediaController,
   Volume,
 } from "@livepeer/react";
 
@@ -43,12 +43,8 @@ export function Player() {
 }
 
 const CustomControls = () => {
-  const loading = useMediaController((state) => state.loading);
-
-  return loading ? (
-    <LoadingSpinner />
-  ) : (
-    <>
+  return (
+    <ControlsContainer>
       <div
         style={{
           position: "absolute",
@@ -149,7 +145,7 @@ const CustomControls = () => {
           />
         </div>
       </div>
-    </>
+    </ControlsContainer>
   );
 };
 

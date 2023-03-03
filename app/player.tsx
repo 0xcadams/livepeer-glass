@@ -1,17 +1,14 @@
 "use client";
 
 import {
-  Player as LivepeerPlayer,
-  MediaControllerState,
-  useMediaController,
-  ControlsContainer,
   FullscreenButton,
+  PlayButton,
+  Player as LivepeerPlayer,
   Progress,
   TimeDisplay,
-  PlayButton,
+  useMediaController,
   Volume,
 } from "@livepeer/react";
-import {} from "@livepeer/react";
 
 export function Player() {
   return (
@@ -21,6 +18,7 @@ export function Player() {
       muted
       autoPlay
       showLoadingSpinner={false}
+      aspectRatio="16to9"
       theme={{
         colors: {
           accent: "#fff",
@@ -39,113 +37,145 @@ export function Player() {
         autohide: 1000,
       }}
     >
-      <ControlsContainer>
-        <div
-          style={{
-            position: "absolute",
-            display: "flex",
-            width: "100%",
-            height: "100%",
-            left: 0,
-            right: 0,
-            top: 0,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <PlayButton
-            size={150}
-            playIcon={<PlayIcon />}
-            pauseIcon={<PauseIcon />}
-          />
-        </div>
-        <BottomControls />
-      </ControlsContainer>
+      <CustomControls />
     </LivepeerPlayer>
   );
 }
 
-export const BottomControls = () => {
+const CustomControls = () => {
+  const loading = useMediaController((state) => state.loading);
+
+  return loading ? (
+    <LoadingSpinner />
+  ) : (
+    <>
+      <div
+        style={{
+          position: "absolute",
+          display: "flex",
+          width: "100%",
+          height: "100%",
+          left: 0,
+          right: 0,
+          top: 0,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <PlayButton
+          size={150}
+          playIcon={<PlayIcon />}
+          pauseIcon={<PauseIcon />}
+        />
+      </div>
+      <div
+        style={{
+          justifyContent: "center",
+
+          display: "inline-flex",
+          alignItems: "center",
+
+          position: "absolute",
+          flexDirection: "column",
+
+          bottom: 20,
+          left: 20,
+          right: 20,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            color: "#fff",
+            flexDirection: "row",
+            marginBottom: 12,
+            alignItems: "center",
+          }}
+        >
+          <span style={{ marginRight: 6, fontWeight: 300 }}>UNLOCKED</span>
+          <div
+            style={{
+              width: 20,
+              height: 20,
+            }}
+          >
+            <UnlockedIcon />
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            flexDirection: "row",
+          }}
+        >
+          <div
+            style={{
+              flexGrow: 1,
+            }}
+          >
+            <Progress />
+          </div>
+
+          <TimeDisplay />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+            marginTop: 8,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <PlayButton
+              playIcon={<PlayIcon size={30} />}
+              pauseIcon={<PauseIcon size={30} />}
+            />
+
+            <Volume mutedIcon={<MutedIcon />} unmutedIcon={<UnmutedIcon />} />
+          </div>
+
+          <FullscreenButton
+            exitIcon={<ExitFullscreenIcon />}
+            enterIcon={<EnterFullscreenIcon />}
+          />
+        </div>
+      </div>
+    </>
+  );
+};
+
+const LoadingSpinner = () => {
   return (
     <div
       style={{
-        justifyContent: "center",
-
-        display: "inline-flex",
-        alignItems: "center",
-
         position: "absolute",
         flexDirection: "column",
-
-        bottom: 20,
-        left: 20,
-        right: 20,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <div
         style={{
           display: "flex",
-          width: "100%",
+          width: 100,
+          height: 100,
           color: "#fff",
           flexDirection: "row",
-          marginBottom: 12,
           alignItems: "center",
+          animation: "rotate 2.4s linear infinite",
         }}
       >
-        <span style={{ marginRight: 6, fontWeight: 300 }}>UNLOCKED</span>
-        <div
-          style={{
-            width: 20,
-            height: 20,
-          }}
-        >
-          <UnlockedIcon />
-        </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          flexDirection: "row",
-        }}
-      >
-        <div
-          style={{
-            flexGrow: 1,
-          }}
-        >
-          <Progress />
-        </div>
-
-        <TimeDisplay />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          marginTop: 8,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <PlayButton
-            playIcon={<PlayIcon size={30} />}
-            pauseIcon={<PauseIcon size={30} />}
-          />
-
-          <Volume mutedIcon={<MutedIcon />} unmutedIcon={<UnmutedIcon />} />
-        </div>
-
-        <FullscreenButton
-          exitIcon={<ExitFullscreenIcon />}
-          enterIcon={<EnterFullscreenIcon />}
-        />
+        <RefreshCircle />
       </div>
     </div>
   );
@@ -289,4 +319,19 @@ const PauseIcon = ({ size }: { size?: number }) => (
       />
     </svg>
   </div>
+);
+
+const RefreshCircle = () => (
+  <svg
+    height="100%"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
+  >
+    <title>Refresh Circle</title>
+    <path
+      fill="currentColor"
+      d="M256 48C141.31 48 48 141.32 48 256c0 114.86 93.14 208 208 208 114.69 0 208-93.31 208-208 0-114.87-93.13-208-208-208zm0 313a94 94 0 010-188h4.21l-14.11-14.1a14 14 0 0119.8-19.8l40 40a14 14 0 010 19.8l-40 40a14 14 0 01-19.8-19.8l18-18c-2.38-.1-5.1-.1-8.1-.1a66 66 0 1066 66 14 14 0 0128 0 94.11 94.11 0 01-94 94z"
+    />
+  </svg>
 );

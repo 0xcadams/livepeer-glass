@@ -13,7 +13,7 @@ export default function Home() {
           Get started with the <code className={styles.code}>Player</code>
         </p>
       </div>
-      <div>
+      <div className={styles.player}>
         <Player />
       </div>
     </main>

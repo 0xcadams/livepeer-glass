@@ -30,7 +30,7 @@ export function Player() {
           trackInactive: "4px",
         },
         radii: {
-          containerBorderRadius: 8,
+          containerBorderRadius: "8px",
         },
       }}
       controls={{
